@@ -2,12 +2,18 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+// 引入路由
 import router from './router'
+// 引入饿了么UI
 import Element from 'element-ui';
+// 引入饿了么UI样式
 import 'element-ui/lib/theme-chalk/index.css'
+// 引入全局格式
 import './assets/css/index.css'
+// 引入axios
 import axios from 'axios';
 Vue.config.productionTip = false
+// 赋值axios给vue原型
 Vue.prototype.$http = axios
 Vue.use(Element)
 /* eslint-disable no-new */

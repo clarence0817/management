@@ -50,10 +50,11 @@ export default {
             url: "http://localhost:8888/api/private/v1/login",
             data: this.user
           }).then(res => {
-            let { msg, status } = res.data.meta;;
+            let { msg, status } = res.data.meta;
             console.log(res);
             if (status === 200) {
-              this.$router.push("/ggg");
+              window.localStorage.setItem("token", res.data.data.token);
+              this.$router.push("/home");
               this.$message({
                 message: "恭喜你，登录成功",
                 type: "success"
@@ -73,9 +74,9 @@ export default {
 
 <style>
 .mylogin {
-  /* width: 100%;
+  width: 100%;
   height: 100%;
-  background-color: #324152; */
+  background-color: #324152;
   position: relative;
 }
 
@@ -87,7 +88,7 @@ export default {
   position: absolute;
   top: 50%;
   right: 50%;
-  transform: translate(50%, 50%);
+  transform: translate(50%, -50%);
   padding: 40px;
   box-sizing: border-box;
 }
