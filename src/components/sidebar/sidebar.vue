@@ -1,5 +1,5 @@
 <template>
-  <el-menu :unique-opened="true" class="el-menu-vertical-demo" style="height:100%">
+  <el-menu :router='true' :unique-opened="true" class="el-menu-vertical-demo" style="height:100%">
     <!-- 父代 -->
     <el-submenu index="1">
       <template slot="title">
@@ -7,7 +7,7 @@
         <span>用户管理</span>
       </template>
       <!-- 子代 -->
-      <el-menu-item index="1-1">
+      <el-menu-item index="/user">
         <i class="el-icon-paperclip"></i>
         <span>用户列表</span>
       </el-menu-item>
