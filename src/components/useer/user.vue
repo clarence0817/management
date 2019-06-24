@@ -1,11 +1,7 @@
 <template>
   <el-card>
     <!-- 面包屑导航 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <bar one="用户管理" two='用户列表'></bar>
     <!-- 搜索栏及添加用户按键 -->
     <div style="margin-top: 15px;">
       <el-col :span="4">
@@ -114,7 +110,11 @@
   </el-card>
 </template>
 <script>
+import bar from '../bar/bar'
 export default {
+  components:{
+    bar
+  },
   data() {
     return {
       tableData: [],
@@ -155,13 +155,11 @@ export default {
         url: `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
         }`,
-        
       }).then(res => {
         //  console.log(res);
         if (res.data.meta.status === 200) {
           this.tableData = res.data.data.users;
           // console.log(res.data.data.users);
-
           this.total = res.data.data.total;
         }
       });

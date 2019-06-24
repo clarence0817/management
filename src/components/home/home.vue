@@ -28,11 +28,11 @@ export default {
   },
   mounted() {
     // 验证是否有登录凭证
-    let token = window.localStorage.getItem('token')
-    if(!token){
-      this.$router.push('/login');
-      this.$message.error("请先登录账号");
-    }
+    // let token = window.localStorage.getItem('token')
+    // if(!token){
+    //   this.$router.push('/login');
+    //   this.$message.error("请先登录账号");
+    // }
   },
 };
 </script>
