@@ -6,12 +6,13 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+ 
+};
 </script>
 
 <style>
-#app{
+#app {
   width: 100%;
   height: 100%;
 }

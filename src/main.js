@@ -12,7 +12,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/index.css'
 // 引入axios
 import axios from 'axios';
+import { log } from 'util';
 Vue.config.productionTip = false
+
+axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
+
+axios.interceptors.request.use(function (config) {
+  // config ： 是当前 axios 请求的所有参数，有了这个 config 之后 axios 中不能再设置任何属性
+  config.headers.Authorization = window.localStorage.getItem("token")
+  // 必须在代码结尾添加 
+  return config // 否则后续代码不执行
+})
 // 赋值axios给vue原型
 Vue.prototype.$http = axios
 Vue.use(Element)
