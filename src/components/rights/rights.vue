@@ -34,6 +34,7 @@ export default {
     bar
   },
   methods: {
+    // 获取列表内容方法
     getconten() {
       this.$http({
         method: "get",
@@ -49,6 +50,7 @@ export default {
     }
   },
   mounted() {
+    // 页面打开获取列表
     this.getconten();
   }
 };

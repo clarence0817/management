@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <!-- 面包屑导航 -->
-    <bar one="用户管理" two='用户列表'></bar>
+    <bar one="用户管理" two="用户列表"></bar>
     <!-- 搜索栏及添加用户按键 -->
     <div style="margin-top: 15px;">
       <el-col :span="4">
@@ -110,9 +110,9 @@
   </el-card>
 </template>
 <script>
-import bar from '../bar/bar'
+import bar from "../bar/bar";
 export default {
-  components:{
+  components: {
     bar
   },
   data() {
@@ -154,7 +154,7 @@ export default {
         method: "get",
         url: `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${
           this.pagesize
-        }`,
+        }`
       }).then(res => {
         //  console.log(res);
         if (res.data.meta.status === 200) {
@@ -184,8 +184,7 @@ export default {
       console.log(obj);
       this.$http({
         method: "put",
-        url: `users/${obj.id}/state/${obj.mg_state}`,
-        
+        url: `users/${obj.id}/state/${obj.mg_state}`
       }).then(res => {
         if (res.data.meta.status === 200) {
           this.$message({
@@ -204,8 +203,7 @@ export default {
       this.$http({
         method: "post",
         url: "users",
-        data: this.adduser,
-        
+        data: this.adduser
       }).then(res => {
         let { meta } = res.data;
         if (meta.status === 201) {
@@ -227,8 +225,7 @@ export default {
       this.box = true;
       this.$http({
         method: "get",
-        url: `users/${id}`,
-        
+        url: `users/${id}`
       }).then(res => {
         // console.log(res);
         let { data, meta } = res.data;
@@ -246,8 +243,7 @@ export default {
         data: {
           email: this.edituser.email,
           mobile: this.edituser.mobile
-        },
-        
+        }
       }).then(res => {
         // console.log(res);
         let { data, meta } = res.data;
@@ -263,26 +259,25 @@ export default {
     },
     // 删除用户数据
     del(id) {
-      this.$http({
-        method: "delete",
-        url: `users/${id}`,
-        
-      }).then(res => {
-        let { data, meta } = res.data;
-        if (meta.status === 200) {
-          this.$confirm("要删除该用户数据吗?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }).then(() => {
+      this.$confirm("要删除该用户数据吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$http({
+          method: "delete",
+          url: `users/${id}`
+        }).then(res => {
+          let { data, meta } = res.data;
+          if (meta.status == 200) {
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: meta.msg
             });
-          });
-          this.pagenum = 1;
-          this.getconten();
-        }
+            this.pagenum = 1;
+            this.getconten();
+          }
+        });
       });
     },
     // 分配用户角色页面并获取数据
@@ -290,8 +285,7 @@ export default {
       this.rolesbox = true;
       this.$http({
         method: "get",
-        url: `roles`,
-        
+        url: `roles`
       }).then(res => {
         // console.log(res)
         let { data, meta } = res.data;
