@@ -52,13 +52,41 @@
       <el-table-column prop="roleName" label="角色名称" width="500"></el-table-column>
       <el-table-column prop="roleDesc" label="角色描述" width="500"></el-table-column>
       <el-table-column label="操作" width="500">
-        <el-row>
+        <el-row slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
           <el-button type="danger" icon="el-icon-delete" circle></el-button>
-          <el-button type="success" icon="el-icon-check" circle></el-button>
+          <el-button
+            type="success"
+            icon="el-icon-check"
+            circle
+            @click="openlist(scope.row.children,scope.row.id)"
+          ></el-button>
         </el-row>
       </el-table-column>
     </el-table>
+
+    <!-- 分配权限窗口 -->
+    <el-dialog title="分配权限" :visible.sync="fp">
+      <div slot="footer" class="dialog-footer">
+        <!-- 树形控件 -->
+        <!-- data: 数据源 -->
+        <!-- props: 当前 tree 的配置项  -->
+        <!-- node-key：给当前树状结构设置唯一标签 -->
+        <!-- default-checked-keys: 不能单独使用，配置 node-Key 使用 -->
+        <!-- default-expand-all: 是否默认展开所有节点 -->
+        <el-tree
+          :default-checked-keys="arr"
+          :default-expand-all="true"
+          :data="treelist"
+          :props="obj"
+          node-key="id"
+          show-checkbox
+          ref="mychex"
+        ></el-tree>
+        <el-button @click="fp = false">取 消</el-button>
+        <el-button type="primary" @click="add">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -68,7 +96,17 @@ import bar from "../bar/bar";
 export default {
   data() {
     return {
-      tableData: []
+      tableData: [],
+      fp: false,
+      treelist: [],
+      // 默认选中数组
+      arr: [],
+      // 配置项
+      obj: {
+        label: "authName",
+        children: "children"
+      },
+      itemid: ""
     };
   },
   components: {
@@ -103,6 +141,60 @@ export default {
             type: "success"
           });
           scr.children = data;
+        }
+      });
+    },
+    // 打开分配选项窗口并获取数据
+    openlist(sonid, id) {
+      // 打开前清空上次打开内容
+      this.arr = [];
+      this.$http({
+        method: "get",
+        url: "rights/tree"
+      }).then(res => {
+        let { data, meta } = res.data;
+        if (meta.status == 200) {
+          // 保存id
+          this.itemid = id;
+
+          this.treelist = data;
+          // 遍历获取第三级权限的id
+          sonid.forEach(item1 => {
+            item1.children.forEach(item2 => {
+              item2.children.forEach(item3 => {
+                this.arr.push(item3.id);
+              });
+            });
+          });
+        }
+      });
+      this.fp = true;
+    },
+    // 选中项提交保存
+    add() {
+      // 获取全选
+      let onekey = this.$refs.mychex.getCheckedKeys();
+      // 获取半选
+      let twokey = this.$refs.mychex.getHalfCheckedKeys();
+      // 拼接数据
+      let rid = [...onekey, ...twokey];
+
+      this.$http({
+        method: "post",
+        url: `roles/${this.itemid}/rights`,
+        data: {
+          rids: rid.join(",")
+        }
+      }).then(res => {
+        // console.log(res);
+        let { data, meta } = res.data;
+        if (meta.status == 200) {
+          this.$message({
+            message: meta.msg,
+            type: "success"
+          });
+          this.fp = false;
+          this.getconten();
         }
       });
     }
