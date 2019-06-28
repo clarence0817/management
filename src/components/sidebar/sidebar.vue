@@ -1,82 +1,44 @@
 <template>
   <el-menu :router='true' :unique-opened="true" class="el-menu-vertical-demo" style="height:100%">
     <!-- 父代 -->
-    <el-submenu index="1">
+    <el-submenu :index="item.path" v-for="(item,index) in menuslist" :key="index">
       <template slot="title">
         <i class="el-icon-location"></i>
-        <span>用户管理</span>
+        <span>{{item.authName}}</span>
       </template>
       <!-- 子代 -->
-      <el-menu-item index="/user">
+      <el-menu-item v-for="(item1,index1) in item.children" :key="index1" :index="'/'+item1.path">
         <i class="el-icon-paperclip"></i>
-        <span>用户列表</span>
-      </el-menu-item>
-    </el-submenu>
-    <!-- 父代 -->
-    <el-submenu index="2">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>权限管理</span>
-      </template>
-      <!-- 子代 -->
-      <el-menu-item index="/roles">
-        <i class="el-icon-paperclip"></i>
-        <span>角色列表</span>
-      </el-menu-item>
-      <el-menu-item index="/rights">
-        <i class="el-icon-paperclip"></i>
-        <span>权限列表</span>
-      </el-menu-item>
-    </el-submenu>
-    <!-- 父代 -->
-    <el-submenu index="3">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>商品管理</span>
-      </template>
-      <!-- 子代 -->
-      <el-menu-item index="3-1">
-        <i class="el-icon-paperclip"></i>
-        <span>商品列表</span>
-      </el-menu-item>
-      <el-menu-item index="3-2">
-        <i class="el-icon-paperclip"></i>
-        <span>分类参数</span>
-      </el-menu-item>
-      <el-menu-item index="3-3">
-        <i class="el-icon-paperclip"></i>
-        <span>商品分类</span>
-      </el-menu-item>
-    </el-submenu>
-    <!-- 父代 -->
-    <el-submenu index="4">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>订单管理</span>
-      </template>
-      <!-- 子代 -->
-      <el-menu-item index="4-1">
-        <i class="el-icon-paperclip"></i>
-        <span>订单列表</span>
-      </el-menu-item>
-    </el-submenu>
-    <!-- 父代 -->
-    <el-submenu index>
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>数据统计</span>
-      </template>
-      <!-- 子代 -->
-      <el-menu-item index="5-1">
-        <i class="el-icon-paperclip"></i>
-        <span>数据报表</span>
+        <span>{{item1.authName}}</span>
       </el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      menuslist:[]
+    }
+  },
+  methods: {
+    getconten(){
+      this.$http({
+        method:'get',
+        url:'menus'
+      }).then(res=>{
+        let{data,meta}=res.data   
+        if(meta.status==200){
+          this.menuslist=data
+        }
+      })
+    }
+  },
+  mounted() {
+    this.getconten()
+  },
+};
 </script>
 
 <style>
