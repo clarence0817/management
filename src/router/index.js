@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import login from '../components/login/login.vue';
-import home from '../components/home/home.vue';
-import users from '../components/useer/users.vue';
-import rights from '../components/rights/rights.vue';
-import roles from '../components/roles/roles.vue';
-import categories from '../components/categories/categories.vue';
-import goods from '../components/goods/goods.vue';
-import add from '../components/add/add.vue';
+
+const login = () => import('../components/login/login.vue');
+const home = () => import('../components/home/home.vue');
+const users = () => import('../components/useer/users.vue');
+const rights = () => import('../components/rights/rights.vue');
+const roles = () => import('../components/roles/roles.vue');
+const categories = () => import('../components/categories/categories.vue');
+const goods = () => import('../components/goods/goods.vue');
+const add = () => import('../components/add/add.vue');
+const orders = () => import('../components/orders/orders.vue');
+const reports = () => import('../components/reports/reports.vue');
+
 
 
 
@@ -24,7 +28,9 @@ let router = new Router({
         { path: '/roles', name: 'roles', component: roles },
         { path: '/categories', name: 'categories', component: categories },
         { path: '/goods', name: 'goods', component: goods },
-        { path: '/goods/add', name: 'add', component: add }
+        { path: '/goods/add', name: 'add', component: add },
+        { path: '/orders', name: 'orders', component: orders },
+        { path: '/reports', name: 'reports', component: reports },
 
       ]
     }

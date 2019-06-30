@@ -14,16 +14,16 @@
       <el-tab-pane label="基本信息" name="first">
         <el-form label-position="top" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="商品名称">
-            <el-input></el-input>
+            <el-input v-model="objgoods.goods_name"></el-input>
           </el-form-item>
           <el-form-item label="商品价格">
-            <el-input></el-input>
+            <el-input v-model="objgoods.goods_price"></el-input>
           </el-form-item>
           <el-form-item label="商品重量">
-            <el-input></el-input>
+            <el-input v-model="objgoods.goods_weight"></el-input>
           </el-form-item>
           <el-form-item label="商品数量">
-            <el-input></el-input>
+            <el-input v-model="objgoods.goods_number"></el-input>
           </el-form-item>
           <el-form-item label="商品分类">
             {{valuelist}}
@@ -59,13 +59,25 @@
           list-type="picture"
           :on-success="imgsuccess"
           :on-remove="removeimg"
+          :on-preview="imglook"
         >
           <el-button size="small" type="primary">点击上传</el-button>
           {{filelist}}
         </el-upload>
       </el-tab-pane>
-      <el-tab-pane label="商品内容" name="werwe">商品内容</el-tab-pane>
+      <el-tab-pane label="商品内容" name="werwe">
+        <el-button type="primary" plain @click="addgoods">添加商品</el-button>
+        <quill-editor v-model="objgoods.goods_introduce" ref="myQuillEditor"></quill-editor>
+      </el-tab-pane>
     </el-tabs>
+    <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="imgbox">
+      <img style="witdh:100%,hight:100%" ref="myimg" src alt />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="imgbox = false">取 消</el-button>
+        <el-button type="primary" @click="imgbox = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -101,7 +113,18 @@ export default {
         Authorization: window.localStorage.getItem("token")
       },
       // 上传文件列表
-      filelist: []
+      filelist: [],
+      // 预览图片盒子
+      imgbox: false,
+      // 提交商品数据对象
+      objgoods: {
+        goods_name: "",
+        goods_cat: "",
+        goods_price: "",
+        goods_number: "",
+        goods_weight: "",
+        goods_introduce: "我是默认值"
+      }
     };
   },
   components: {
@@ -166,6 +189,36 @@ export default {
           this.filelist.splice(index, 1);
         }
       });
+    },
+    // 预览图片片
+    imglook(file) {
+      this.imgbox = true;
+
+      this.$nextTick(() => {
+        var img = file.response.data.url;
+
+        this.$refs.myimg.src = img;
+      });
+    },
+    // 新增商品
+    addgoods() {
+      this.objgoods.goods_cat = this.valuelist.join(",");
+      this.$http({
+        method: "post",
+        url: "goods",
+        data: this.objgoods
+      }).then(res => {
+        // console.log(res);
+        let { meta, data } = res.data;
+        if (meta.status == 201) {
+          this.$message({
+            message: meta.msg,
+            type: "success"
+          });
+          this.$router.push("/goods");
+          this.getconten();
+        }
+      });
     }
   },
   mounted() {
@@ -185,5 +238,8 @@ label.el-checkbox.is-bordered.is-checked {
 
 .mybox {
   margin: 20px 0px;
+}
+.ql-editor {
+  height: 400px;
 }
 </style>

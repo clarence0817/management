@@ -12,11 +12,18 @@ import 'element-ui/lib/theme-chalk/index.css'
 import ltree from 'element-tree-grid'
 // 引入全局格式
 import './assets/css/index.css'
+// 导入富文本编辑框
+import VueQuillEditor from 'vue-quill-editor'
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+Vue.use(VueQuillEditor)
 // 引入axios
 import axios from 'axios';
 import { log } from 'util';
 Vue.config.productionTip = false
-console.log(ltree.name)
 
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
 
